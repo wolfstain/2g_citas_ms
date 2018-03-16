@@ -1,2 +1,3 @@
 # 2g_citas_ms
-microservicio encargado de las citas, para la aplicación dop
+
+Microservicio encargado de la gestion de citas, para la aplicación dop.
