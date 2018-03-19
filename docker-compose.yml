@@ -1,0 +1,16 @@
+version: '2'
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - "mongodata:/data/2g_citas_bd"
+    networks:
+      - network1
+
+volumes:
+   mongodata:
+
+networks:
+  network1:
