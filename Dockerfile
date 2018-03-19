@@ -1,17 +1,18 @@
-FROM golang:1.9.2 as builder
-ARG SOURCE_LOCATION=/
-WORKDIR ${SOURCE_LOCATION}
-RUN go get -d -v github.com/gorilla/mux \
-	&& go get -d -v gopkg.in/mgo.v2/bson \
-	&& go get -d -v gopkg.in/mgo.v2
-COPY main.go .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+# golang image where workspace (GOPATH) configured at /go.
+FROM golang
 
-FROM alpine:latest
-ARG SOURCE_LOCATION=/
-RUN apk --no-cache add curl
+# Install dependencies
+RUN go get github.com/gorilla/mux
+RUN go get gopkg.in/mgo.v2
+
+# copy the local package files to the container workspace
+COPY . /go/src/2g_citas_ms
+
+# Build the users command inside the container.
+RUN go install 2g_citas_ms
+
+# Run the users microservice when the container starts.
+ENTRYPOINT /go/bin/2g_citas_ms
+
+# Service listens on port 3300.
 EXPOSE 3300
-RUN mkdir /citas-ms
-WORKDIR /citas-ms
-COPY --from=builder ${SOURCE_LOCATION} .
-CMD ["./app"]

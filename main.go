@@ -14,8 +14,8 @@ import (
 )
 
 const (
-	// hosts      = "dockercompose_mongodb_1:27017"
-	hosts      = "localhost:27017"
+	// hosts      = "localhost:27017"
+	hosts      = "192.168.99.101:27017"
 	database   = "2g_citas_bd"
 	username   = ""
 	password   = ""
@@ -149,7 +149,7 @@ func main() {
 	router.HandleFunc("/citas/{id}", EditCitaEndpoint).Methods("PUT")
 	router.HandleFunc("/citas/{id}", DeleteCitaEndpoint).Methods("DELETE")
 
-	log.Fatal(http.ListenAndServe("localhost:3300", router))
+	log.Fatal(http.ListenAndServe(":3300", router))
 }
 
 // initialiseMongo, se encarga de inicializar mongo con los datos almacencados como constantes
