@@ -1,0 +1,216 @@
+#Test with: http://editor.swagger.io/
+
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Microservicio para Citas
+  description: Go + mongoDB
+  license:
+    name: dop aplicación de citas
+host: 192.168.99.101:3023
+basePath: /
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /citas:
+    post:
+      summary: Crea una nueva cita
+      operationId: CreateCitaEndpoint
+      parameters:
+        - name: cita
+          in: body
+          required: true
+          description: cita Object
+          schema:
+            $ref: '#/definitions/citaInput'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /citas/{id}:
+    get:
+      summary: Retorna una cita dado su id
+      operationId: GetCitaEndpoint
+      parameters:
+        - name: id
+          in: path
+          description: El id de la cita que va a ser retornada
+          required: true
+          type: number
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/cita'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    put:
+      summary: Actualiza una cita dado su id
+      operationId: EditCitaEndpoint
+      parameters:
+        - name: id
+          in: path
+          description: El id de la cita que va a ser actualizada
+          required: true
+          type: string
+        - name: cita
+          in: body
+          required: true
+          description: cita Object
+          schema:
+            $ref: '#/definitions/citaInput'
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    delete:
+      summary: Elimina una cita dado su id
+      operationId: DeleteCitaEndpoint
+      parameters:
+        - name: id
+          in: path
+          description: El id de la cita que va a ser eliminada
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /citas/personas/{id}:
+    get:
+      summary: Retorna las citas de una persona dado su id
+      operationId: GetCitaPersonaEndpoint
+      parameters:
+        - name: id
+          in: path
+          description: El id de la persona de quien se retornaran las citas
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/cita'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+definitions:
+
+  # citas
+  cita:
+    type: object
+    properties:
+      ID:
+        type: string
+      Cita:
+        type: string
+      Lugar:
+        type: string
+      Fecha:
+        type: string
+      Personas:
+        type: array
+        items:
+          type: integer
+      Estado:
+        type: string
+
+  citaInput:
+    type: object
+    properties:
+      Cita:
+        type: string
+      Lugar:
+        type: string
+      Fecha:
+        type: string
+      Personas:
+        type: array
+        items:
+          type: integer
+      Estado:
+        type: string
+
+  citasList:
+    type: object
+    required:
+      - total
+      - list
+    properties:
+      total:
+        type: number
+      list:
+        type: array
+        items:
+          $ref: '#/definitions/cita'
+
+# Errors
+  ErrorModel:
+    type: object
+    required:
+      - message
+      - code
+    properties:
+      message:
+        type: string
+      code:
+        type: number
+      description:
+        type: object

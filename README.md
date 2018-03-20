@@ -2,9 +2,9 @@
 
 Microservicio encargado de la gestión de citas, para la aplicación dop.
 
-Se usa como lenguaje de base Go, el cual nos facilita la creación de aplicaciones enfocadas en web y nos brinda herramientas para la creación de servicios web.
+Se usa como lenguaje de base **Go**, el cual nos facilita la creación de aplicaciones enfocadas en web y nos brinda herramientas para la creación de servicios web.
 
-Como base de datos se usa mongodb, se escogió debido a que cada cita puede ser variable, tanto en el número de personas como en los lugares donde se realizara (itinerario), de esta forma podremos integrar un arreglo para estos campos, y consultarlos de forma mas sencilla.
+Como base de datos se usa **mongoDB**, se escogió debido a que cada cita puede ser variable, tanto en el número de personas como en los lugares donde se realizara (itinerario), de esta forma podremos integrar un arreglo para estos campos, y consultarlos de forma mas sencilla.
 
 
 ### Dependencias:
@@ -34,6 +34,8 @@ En la carpeta del archivo ejecutar las siguientes instucciones:
 
 `docker run --name citas-ms -p 3023:3300 citas-ms`
 
+**Aclaración:** Los comandos se deben ejecutar desde la terminal, en la ruta del proyecto (1. en una terminal y 2.,3. desde otra terminal).
+
 Con esto a tendremos en Rancher el servicio en ejecución
 
 ![Microservicio en Rancher](Imagenes/rancher.png "Microservicio en Rancher")
@@ -41,10 +43,10 @@ Con esto a tendremos en Rancher el servicio en ejecución
 Ahora procedemos a ingresar a la dirección:
 <http://192.168.99.101:3023> desde donde probaremos los diferentes servicios con la ayuda de postman.
 
-CRUD | RUTA
-:--: | :--
-POST | /citas
-GET  | /citas/{id}
-GET  | /citas/personas/{id}
-PUT  | /citas/{id}
-DELETE | /citas/{id}
+CRUD | RUTA | ACCIÓN
+---- | ---- | ------
+POST | /citas | Crea una nueva cita con el JSON que se le envia.
+GET  | /citas/{id} | Obtiene una cita, dado su id.
+GET  | /citas/personas/{id} | Obtiene las citas de una persona en particular, dado su id.
+PUT  | /citas/{id} | Actualiza la información de una cita, dado su id.
+DELETE | /citas/{id} | Elimina una cita, dado su id.
