@@ -37,3 +37,14 @@ En la carpeta del archivo ejecutar las siguientes instucciones:
 Con esto a tendremos en Rancher el servicio en ejecución
 
 ![Microservicio en Rancher](Imagenes/rancher.png "Microservicio en Rancher")
+
+Ahora procedemos a ingresar a la dirección:
+<http://192.168.99.101:3023> desde donde probaremos los diferentes servicios con la ayuda de postman.
+
+CRUD | RUTA
+:--: | :--
+POST | /citas
+GET  | /citas/{id}
+GET  | /citas/personas/{id}
+PUT  | /citas/{id}
+DELETE | /citas/{id}
