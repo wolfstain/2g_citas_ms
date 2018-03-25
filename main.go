@@ -6,16 +6,18 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
+	ai "github.com/night-codes/mgo-ai"
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
 const (
-	// hosts      = "localhost:27017"
-	hosts      = "192.168.99.101:27017"
+	hosts = "localhost:27017"
+	// hosts      = "192.168.99.101:27017"
 	database   = "2g_citas_bd"
 	username   = ""
 	password   = ""
@@ -24,12 +26,13 @@ const (
 
 // Cita crea el tipo de cita, para los JSON
 type Cita struct {
-	ID       bson.ObjectId `bson:"_id,omitempty" json:"id,omitempty"`
-	Cita     string        `bson:"Cita" json:"Cita,omitempty"`
-	Lugar    string        `bson:"Lugar" json:"Lugar,omitempty"`
-	Fecha    string        `bson:"Fecha" json:"Fecha,omitempty"`
-	Personas []string      `bson:"Personas" json:"Personas,omitempty"`
-	Estado   string        `bson:"Estado" json:"Estado,omitempty"`
+	ID          bson.ObjectId `bson:"_id,omitempty" json:"_id,omitempty"`
+	Cita        string        `bson:"cita" json:"cita,omitempty"`
+	Lugar       int           `bson:"lugar" json:"lugar,omitempty"`
+	Fecha       string        `bson:"fecha" json:"fecha,omitempty"`
+	Personas    []int         `bson:"personas" json:"personas,omitempty"`
+	Estado      string        `bson:"estado" json:"estado,omitempty"`
+	Visibilidad bool          `bson:"visibilidad" json:"visibilidad,omitempty"`
 }
 
 // MongoStore crea el tipo de dato MongoStore
@@ -59,6 +62,7 @@ func CreateCitaEndpoint(w http.ResponseWriter, req *http.Request) {
 	}
 
 	cita.ID = bson.NewObjectId()
+	// cita.ID = bson.ObjectId(ai.Next(collection))
 
 	err = col.Insert(&cita)
 	if err != nil {
@@ -97,7 +101,12 @@ func GetCitaPersonaEndpoint(w http.ResponseWriter, req *http.Request) {
 	col := mongoStore.session.DB(database).C(collection)
 	citas := []Cita{}
 
-	col.Find(bson.M{"Personas": params["id"]}).All(&citas)
+	idp, err := strconv.Atoi(params["id"])
+	if err != nil {
+		fmt.Printf("ID invalido")
+	}
+
+	col.Find(bson.M{"personas": idp}).All(&citas)
 	jsonString, err := json.Marshal(citas)
 	if err != nil {
 		panic(err)
@@ -108,7 +117,6 @@ func GetCitaPersonaEndpoint(w http.ResponseWriter, req *http.Request) {
 
 // EditCitaEndpoint Edita la cita dado su id y un json con la info req to w
 func EditCitaEndpoint(w http.ResponseWriter, req *http.Request) {
-	fmt.Fprintln(w, "EditCitaEndpoint: Edita la cita dado su id y un json con la info, no esta implementado, aun!")
 	params := mux.Vars(req)
 	col := mongoStore.session.DB(database).C(collection)
 	var cita Cita
@@ -165,5 +173,7 @@ func initialiseMongo() (session *mgo.Session) {
 	if err != nil {
 		panic(err)
 	}
+	// connect AutoIncrement to collection "counters"
+	ai.Connect(session.DB(database).C("counters"))
 	return
 }

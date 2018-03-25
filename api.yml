@@ -137,7 +137,7 @@ paths:
         '200':
           description: Ok
           schema:
-            $ref: '#/definitions/cita'
+            $ref: '#/definitions/citaList'
         '404':
           description: Not Found
           schema:
@@ -158,37 +158,41 @@ definitions:
     type: object
     properties:
       ID:
+        type: object
+      cita:
         type: string
-      Cita:
+      lugar:
+        type: integer
+      fecha:
         type: string
-      Lugar:
-        type: string
-      Fecha:
-        type: string
-      Personas:
+      personas:
         type: array
         items:
           type: integer
-      Estado:
+      estado:
         type: string
+      visibilidad:
+        type: boolean
 
   citaInput:
     type: object
     properties:
-      Cita:
+      cita:
         type: string
-      Lugar:
+      lugar:
+        type: integer
+      fecha:
         type: string
-      Fecha:
-        type: string
-      Personas:
+      personas:
         type: array
         items:
           type: integer
-      Estado:
+      estado:
         type: string
+      visibilidad:
+        type: boolean
 
-  citasList:
+  citaList:
     type: object
     required:
       - total

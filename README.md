@@ -22,7 +22,7 @@ Como base de datos se usa **mongoDB**, se escogió debido a que cada cita puede 
 
 En la carpeta del archivo ejecutar las siguientes instucciones:
 
-1. Subir la bd a rancher:
+1. Subir la bd a rancher e inicializarla:
 
 `docker-compose up`
 
@@ -50,3 +50,19 @@ GET  | /citas/{id} | Obtiene una cita, dado su id.
 GET  | /citas/personas/{id} | Obtiene las citas de una persona en particular, dado su id.
 PUT  | /citas/{id} | Actualiza la información de una cita, dado su id.
 DELETE | /citas/{id} | Elimina una cita, dado su id.
+
+Un ejemplo de JSON es el siguiente:
+
+```json
+{
+    "Cita" : "Asunto",
+    "Lugar" : 1,
+    "Fecha" : "AAAA-MM-DD HH:MM",
+    "Personas" : [
+        1,
+        3
+    ],
+    "Estado" : "Activo",
+    "Visibilidad":false
+}
+```
