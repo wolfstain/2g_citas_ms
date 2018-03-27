@@ -17,6 +17,10 @@ Como base de datos se usa **mongoDB**, se escogió debido a que cada cita puede 
 
   `go get gopkg.in/mgo.v2`
 
+3. ai para implementar un id auto incremental:
+
+  `go get github.com/night-codes/mgo-ai`
+
 
 ### Ejecución
 

@@ -16,8 +16,8 @@ import (
 )
 
 const (
-	hosts = "localhost:27017"
-	// hosts      = "192.168.99.101:27017"
+	// hosts = "localhost:27017"
+	hosts      = "192.168.99.101:27017"
 	database   = "2g_citas_bd"
 	username   = ""
 	password   = ""
@@ -26,13 +26,13 @@ const (
 
 // Cita crea el tipo de cita, para los JSON
 type Cita struct {
-	ID          bson.ObjectId `bson:"_id,omitempty" json:"_id,omitempty"`
-	Cita        string        `bson:"cita" json:"cita,omitempty"`
-	Lugar       int           `bson:"lugar" json:"lugar,omitempty"`
-	Fecha       string        `bson:"fecha" json:"fecha,omitempty"`
-	Personas    []int         `bson:"personas" json:"personas,omitempty"`
-	Estado      string        `bson:"estado" json:"estado,omitempty"`
-	Visibilidad bool          `bson:"visibilidad" json:"visibilidad,omitempty"`
+	ID          int64  `bson:"_id,omitempty" json:"id,omitempty"`
+	Cita        string `bson:"cita" json:"cita,omitempty"`
+	Lugar       int    `bson:"lugar" json:"lugar,omitempty"`
+	Fecha       string `bson:"fecha" json:"fecha,omitempty"`
+	Personas    []int  `bson:"personas" json:"personas,omitempty"`
+	Estado      string `bson:"estado" json:"estado,omitempty"`
+	Visibilidad bool   `bson:"visibilidad" json:"visibilidad"`
 }
 
 // MongoStore crea el tipo de dato MongoStore
@@ -61,8 +61,8 @@ func CreateCitaEndpoint(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	cita.ID = bson.NewObjectId()
-	// cita.ID = bson.ObjectId(ai.Next(collection))
+	// cita.ID = bson.NewObjectId()
+	cita.ID = int64(ai.Next(collection))
 
 	err = col.Insert(&cita)
 	if err != nil {
@@ -86,7 +86,17 @@ func GetCitaEndpoint(w http.ResponseWriter, req *http.Request) {
 	col := mongoStore.session.DB(database).C(collection)
 	var cita Cita
 
-	col.FindId(bson.ObjectIdHex(params["id"])).One(&cita)
+	idc, err := strconv.Atoi(params["id"])
+	if err != nil {
+		fmt.Fprint(w, "ID es formato invalido")
+		return
+	}
+
+	if col.FindId(idc).One(&cita) != nil {
+		fmt.Fprint(w, "ID no encontrado")
+		return
+	}
+
 	jsonString, err := json.Marshal(cita)
 	if err != nil {
 		panic(err)
@@ -104,6 +114,7 @@ func GetCitaPersonaEndpoint(w http.ResponseWriter, req *http.Request) {
 	idp, err := strconv.Atoi(params["id"])
 	if err != nil {
 		fmt.Printf("ID invalido")
+		return
 	}
 
 	col.Find(bson.M{"personas": idp}).All(&citas)
@@ -121,10 +132,16 @@ func EditCitaEndpoint(w http.ResponseWriter, req *http.Request) {
 	col := mongoStore.session.DB(database).C(collection)
 	var cita Cita
 
-	json.NewDecoder(req.Body).Decode(&cita)
-	err := col.UpdateId(bson.ObjectIdHex(params["id"]), &cita)
+	idc, err := strconv.Atoi(params["id"])
 	if err != nil {
-		panic(err)
+		fmt.Fprint(w, "ID es formato invalido")
+		return
+	}
+
+	json.NewDecoder(req.Body).Decode(&cita)
+	if col.UpdateId(idc, &cita) != nil {
+		fmt.Fprint(w, "ID no encontrado")
+		return
 	}
 
 	fmt.Fprint(w, "result : success")
@@ -135,9 +152,15 @@ func DeleteCitaEndpoint(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	col := mongoStore.session.DB(database).C(collection)
 
-	err := col.RemoveId(bson.ObjectIdHex(params["id"]))
+	idc, err := strconv.Atoi(params["id"])
 	if err != nil {
-		panic(err)
+		fmt.Fprint(w, "ID es formato invalido")
+		return
+	}
+
+	if col.RemoveId(idc) != nil {
+		fmt.Fprint(w, "ID no encontrado")
+		return
 	}
 
 	fmt.Fprint(w, "result : success")

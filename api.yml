@@ -158,7 +158,7 @@ definitions:
     type: object
     properties:
       ID:
-        type: object
+        type: integer
       cita:
         type: string
       lugar:

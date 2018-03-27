@@ -4,6 +4,7 @@ FROM golang
 # Install dependencies
 RUN go get github.com/gorilla/mux
 RUN go get gopkg.in/mgo.v2
+RUN go get github.com/night-codes/mgo-ai
 
 # copy the local package files to the container workspace
 COPY . /go/src/2g_citas_ms
