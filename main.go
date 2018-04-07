@@ -93,7 +93,7 @@ func GetCitaEndpoint(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if col.FindId(idc).One(&cita) != nil {
-		fmt.Fprint(w, "ID no encontrado")
+		fmt.Fprint(w, "{result: ID no encontrado}")
 		return
 	}
 
@@ -113,7 +113,7 @@ func GetCitaPersonaEndpoint(w http.ResponseWriter, req *http.Request) {
 
 	idp, err := strconv.Atoi(params["id"])
 	if err != nil {
-		fmt.Printf("ID invalido")
+		fmt.Printf("ID es formato invalido")
 		return
 	}
 
@@ -134,36 +134,52 @@ func EditCitaEndpoint(w http.ResponseWriter, req *http.Request) {
 
 	idc, err := strconv.Atoi(params["id"])
 	if err != nil {
-		fmt.Fprint(w, "ID es formato invalido")
+		fmt.Fprint(w, "{result: ID es formato invalido}")
 		return
 	}
 
 	json.NewDecoder(req.Body).Decode(&cita)
 	if col.UpdateId(idc, &cita) != nil {
-		fmt.Fprint(w, "ID no encontrado")
+		fmt.Fprint(w, "{result: ID no encontrado}")
 		return
 	}
 
-	fmt.Fprint(w, "result : success")
+	jsonString, err := json.Marshal(cita)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Fprint(w, string(jsonString))
 }
 
 // DeleteCitaEndpoint Elimina una cita dado su id req to w
 func DeleteCitaEndpoint(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	col := mongoStore.session.DB(database).C(collection)
+	var cita Cita
 
 	idc, err := strconv.Atoi(params["id"])
 	if err != nil {
-		fmt.Fprint(w, "ID es formato invalido")
+		fmt.Fprint(w, "{result: ID es formato invalido}")
+		return
+	}
+
+	if col.FindId(idc).One(&cita) != nil {
+		fmt.Fprint(w, "{result: ID no encontrado}")
 		return
 	}
 
 	if col.RemoveId(idc) != nil {
-		fmt.Fprint(w, "ID no encontrado")
+		fmt.Fprint(w, "{result: ID no encontrado}")
 		return
 	}
 
-	fmt.Fprint(w, "result : success")
+	jsonString, err := json.Marshal(cita)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Fprint(w, string(jsonString))
 }
 
 func main() {
