@@ -28,15 +28,20 @@ En la carpeta del archivo ejecutar las siguientes instucciones:
 
 1. Subir la bd a rancher e inicializarla:
 
-`docker-compose up`
+  `docker-compose up`
 
 2. Subir el programa a Rancher
 
-`docker build -t citas-ms .`
+  `docker build -t citas-ms .`
 
 3. Iniciar el programa
 
-`docker run --name citas-ms -p 3023:3300 citas-ms`
+  `docker run --name citas-ms -p 3023:3300 citas-ms`
+
+  Una vez se inice por primera vez, las siguientes veces se inicia unicamente con:
+
+  `docker start citas-ms`
+
 
 **Aclaración:** Los comandos se deben ejecutar desde la terminal, en la ruta del proyecto (1. en una terminal y 2.,3. desde otra terminal).
 
