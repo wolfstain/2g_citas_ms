@@ -1,15 +1,21 @@
 version: '2'
+
 services:
-  mongodb:
-    image: mongo
-    container_name: citas-bd
+  citas-ms:
+    build: .     
     ports:
-      - "27017:27017"
+      - "4002:3300"
+    depends_on:
+      - citas-bd
+  citas-bd:
+    image: mongo
+    ports:
+      - "27018:27017"
     volumes:
       - "mongodata:/data/2g_citas_bd"
     networks:
       - citas-bd
-
+  
 volumes:
    mongodata:
 
