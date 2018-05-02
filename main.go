@@ -17,7 +17,7 @@ import (
 
 const (
 	// hosts = "localhost:27017"
-	hosts      = "35.227.46.47:27017"
+	hosts      = "35.227.46.47:27018"
 	database   = "2g_citas_bd"
 	username   = ""
 	password   = ""
