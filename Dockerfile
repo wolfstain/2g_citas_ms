@@ -16,4 +16,4 @@ RUN go install 2g_citas_ms
 ENTRYPOINT /go/bin/2g_citas_ms
 
 # Service listens on port 3300.
-EXPOSE 3300
+EXPOSE 4002
