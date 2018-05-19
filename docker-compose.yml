@@ -2,12 +2,17 @@ version: '2'
 
 services:
   citas-ms:
+    dns_search: .
     build: .     
     ports:
       - "4002:3300"
+    links:
+      - citas_db
     depends_on:
+      - citas_db
+    networks:
       - citas-bd
-  citas-bd:
+  citas_db:
     image: mongo
     ports:
       - "27018:27017"

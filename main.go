@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
+	//"time"
 
 	"github.com/gorilla/mux"
 	ai "github.com/night-codes/mgo-ai"
@@ -16,12 +16,11 @@ import (
 )
 
 const (
-	// hosts = "localhost:27017"
-	hosts      = "35.227.46.47:27018"
+	hosts      = "citas_bd"	
 	database   = "2g_citas_bd"
 	username   = ""
 	password   = ""
-	collection = "citas"
+	collection = "citas"	
 )
 
 // Cita crea el tipo de cita, para los JSON
@@ -201,17 +200,19 @@ func main() {
 
 // initialiseMongo, se encarga de inicializar mongo con los datos almacencados como constantes
 func initialiseMongo() (session *mgo.Session) {
-	info := &mgo.DialInfo{
+	/*info := &mgo.DialInfo{
 		Addrs:    []string{hosts},
 		Timeout:  60 * time.Second,
 		Database: database,
 		Username: username,
 		Password: password,
-	}
-	session, err := mgo.DialWithInfo(info)
-	if err != nil {
+	}*/
+	//session, err := mgo.DialWithInfo(info)
+	session, err := mgo.Dial(hosts)
+	if err != nil {		
+		log.Fatal(err)
 		panic(err)
-	}
+	}	
 	// connect AutoIncrement to collection "counters"
 	ai.Connect(session.DB(database).C("counters"))
 	return

@@ -1,5 +1,5 @@
 # golang image where workspace (GOPATH) configured at /go.
-FROM golang
+FROM golang:1.10
 
 # Install dependencies
 RUN go get github.com/gorilla/mux
