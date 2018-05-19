@@ -5,13 +5,9 @@ services:
     dns_search: .
     build: .     
     ports:
-      - "4002:3300"
-    links:
-      - citas_db
-    depends_on:
-      - citas_db
+      - "4002:3300"    
     networks:
-      - citas-bd
+      - citas
   citas_db:
     image: mongo
     ports:
@@ -19,10 +15,10 @@ services:
     volumes:
       - "mongodata:/data/2g_citas_bd"
     networks:
-      - citas-bd
+      - citas
   
 volumes:
    mongodata:
 
 networks:
-  citas-bd:
+  citas:

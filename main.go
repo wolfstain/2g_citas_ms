@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	hosts      = "citas_bd"	
+	hosts      = "citas_db"	
 	database   = "2g_citas_bd"
 	username   = ""
 	password   = ""
