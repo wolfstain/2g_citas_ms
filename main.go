@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	//"time"
+	"time"
 
 	"github.com/gorilla/mux"
 	ai "github.com/night-codes/mgo-ai"
@@ -195,25 +195,26 @@ func main() {
 	router.HandleFunc("/citas/{id}", EditCitaEndpoint).Methods("PUT")
 	router.HandleFunc("/citas/{id}", DeleteCitaEndpoint).Methods("DELETE")
 
-	log.Fatal(http.ListenAndServe(":3300", router))
+	log.Fatal(http.ListenAndServe(":4002", router))
 }
 
 // initialiseMongo, se encarga de inicializar mongo con los datos almacencados como constantes
 func initialiseMongo() (session *mgo.Session) {
-	/*info := &mgo.DialInfo{
+	info := &mgo.DialInfo{
 		Addrs:    []string{hosts},
 		Timeout:  60 * time.Second,
 		Database: database,
 		Username: username,
 		Password: password,
-	}*/
-	//session, err := mgo.DialWithInfo(info)
-	session, err := mgo.Dial(hosts)
+	}
+	session, err := mgo.DialWithInfo(info)
+	//session, err := mgo.Dial(hosts)
 	if err != nil {		
 		log.Fatal(err)
 		panic(err)
 	}	
 	// connect AutoIncrement to collection "counters"
 	ai.Connect(session.DB(database).C("counters"))
+	fmt.Printf("Ms citas arriba")
 	return
 }

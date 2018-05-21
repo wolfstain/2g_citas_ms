@@ -5,10 +5,10 @@ services:
     dns_search: .
     build: .     
     ports:
-      - "4002:3300"    
+      - "4002:4002"    
     networks:
       - citas
-  citas_db:
+  citas-db:
     image: mongo
     ports:
       - "27018:27017"
